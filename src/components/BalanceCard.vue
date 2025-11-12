@@ -1,4 +1,6 @@
 <script setup>
+import { formatAmount } from '@/utils/formatters'
+
 const props = defineProps({
   balance: {
     type: [Number, String],
@@ -13,13 +15,6 @@ const props = defineProps({
     default: false,
   },
 })
-
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(amount)
-}
 </script>
 
 <template>
@@ -36,7 +31,7 @@ const formatCurrency = (amount) => {
       <h2 class="text-xl font-semibold mb-4">{{ title }}</h2>
 
       <div class="text-3xl font-semibold tracking-tight text-gray-950 dark:text-white">
-        {{ formatCurrency(balance) }}
+        {{ formatAmount(balance) }}
       </div>
     </div>
   </div>

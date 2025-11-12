@@ -2,12 +2,17 @@
 import { ref } from 'vue'
 
 import BalanceCard from './components/BalanceCard.vue'
+import TransferForm from './components/TransferForm.vue'
 
 const balance = ref(546)
 const credit = ref(1040950)
 const debit = ref(5416)
 
 const statLoading = ref(false)
+
+const handleTransferCompleted = () => {
+  //show toast
+}
 </script>
 
 <template>
@@ -19,5 +24,7 @@ const statLoading = ref(false)
       <BalanceCard title="Credit" :balance="credit" :loading="statLoading" />
       <BalanceCard title="Debit" :balance="debit" :loading="statLoading" />
     </div>
+
+    <TransferForm @transfer-completed="handleTransferCompleted" />
   </div>
 </template>
