@@ -17,3 +17,7 @@ export const formatAmount = (amount, options = {}) => {
     maximumFractionDigits,
   }).format(amount)
 }
+
+export const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleString()
+}
