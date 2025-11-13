@@ -39,15 +39,13 @@ const submitTransfer = async () => {
     <form @submit.prevent="submitTransfer">
       <div class="gap-4 flex-col flex">
         <div>
-          <label for="receiver_id" class="block text-lg font-medium text-gray-300">
-            Recipient User ID
-          </label>
           <input
             type="number"
             id="receiver_id"
+            placeholder="Recipient User ID"
             v-model="form.receiver_id"
             :class="[
-              'mt-1 block w-full border h-10 rounded-md border-gray-300 shadow-sm ',
+              'mt-1 block w-full border px-3 py-2 h-10 rounded-md border-gray-300 shadow-sm ',
               errors.receiver_id ? 'border-red-500' : '',
             ]"
             required
@@ -58,13 +56,13 @@ const submitTransfer = async () => {
         </div>
 
         <div>
-          <label for="amount" class="block text-lg font-medium text-gray-300"> Amount </label>
           <input
             type="number"
             id="amount"
+            placeholder="Amount"
             v-model="form.amount"
             :class="[
-              'mt-1 block w-full border  h-10 rounded-md border-gray-300 shadow-sm ',
+              'mt-1 block w-full border px-3 py-2 h-10 rounded-md border-gray-300 shadow-sm ',
               errors.amount ? 'border-red-500' : '',
             ]"
             required

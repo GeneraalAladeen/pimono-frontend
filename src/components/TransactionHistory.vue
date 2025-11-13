@@ -48,7 +48,7 @@ const getAmountDisplay = (transaction) => {
 
 <template>
   <div class="border border-gray-600 rounded-lg shadow-md p-6">
-    <h2 class="text-2xl font-semibold mb-4">Transaction History</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-amber-50">Transaction History</h2>
 
     <div v-if="loading" class="flex flex-col gap-6">
       <div v-for="n in 5" :key="n" class="animate-pulse gap-6">
