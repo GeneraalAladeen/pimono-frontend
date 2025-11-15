@@ -11,12 +11,13 @@ import BalanceCard from '@/components/BalanceCard.vue'
 import TransferForm from '@/components/TransferForm.vue'
 import TransactionHistory from '@/components/TransactionHistory.vue'
 
-const balance = ref()
+const authStore = useAuthStore()
+
+const balance = ref(authStore.user?.balance)
 const credit = ref(1040950)
 const debit = ref(5416)
 const pagination = ref({})
 
-const authStore = useAuthStore()
 
 const transactions = ref([])
 const transactionsLoading = ref(false)
@@ -34,7 +35,6 @@ const loadTransactions = async () => {
   try {
     const response = await axiosInstance.get('transactions')
 
-    balance.value = authStore.user.balance
     transactions.value = response.data.data
     pagination.value = response.data.links
   } catch (error) {
@@ -67,14 +67,15 @@ useEchoPublic(
 );
 
 const handleRealtimeTransaction = (event) => {
-  console.log(event)
-  if (event.transaction.sender_id === authStore.userId) {
-    balance.value = parseFloat(balance.value) - parseFloat(event.transaction.total_amount_debited)
+  const { transaction } = event;
+
+  if (transaction.sender_id === authStore.userId) {
+    balance.value = transaction.sender.balance
   } else {
-    balance.value = parseFloat(balance.value) + parseFloat(event.transaction.amount)
+    balance.value = transaction.receiver.balance
   }
-  
-  transactions.value.unshift(event.transaction)
+
+  transactions.value.unshift(transaction)
   
   // show toast
   alert(`Transaction complete`)
@@ -93,7 +94,6 @@ const handleLogout = async () => {
 
 const handleTransferCompleted = () => {
   //show toast
-  loadTransactions()
 }
 
 onMounted(async () => {
