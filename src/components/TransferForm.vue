@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, computed, defineEmits, defineProps } from 'vue'
 import { formatAmount } from '@/utils/formatters'
+import axiosInstance from '@/utils/axios'
 
 const emit = defineEmits(['transfer-completed'])
 
@@ -10,10 +11,7 @@ const form = reactive({
   amount: '',
 })
 
-const errors = reactive({
-  receiver_id: '',
-  amount: '',
-})
+const errors = ref({})
 
 const commissionFee = computed(() => {
   const amount = parseFloat(form.amount) || 0
@@ -28,8 +26,33 @@ const totalAmount = computed(() => {
 const submitTransfer = async () => {
   loading.value = true
 
-  errors.receiver_id = ''
-  errors.amount = ''
+  errors.value = {}
+
+  
+  try {
+    await axiosInstance.post('transactions', form)
+    
+    // show toast
+    alert('Transfer completed successfully!')
+    
+    form.receiver_id = ''
+    form.amount = ''
+    
+    emit('transfer-completed')
+    
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+
+      errors.value = error.response.data.errors;
+      //show toast
+      alert('Please check the form for errors')
+    } else {
+      const message = error.response?.data?.message || 'Transfer failed'
+      alert(message)
+    }
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 

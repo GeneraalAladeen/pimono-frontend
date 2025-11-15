@@ -69,6 +69,7 @@ const handleLogout = async () => {
 
 const handleTransferCompleted = () => {
   //show toast
+  loadTransactions()
 }
 
 onMounted(async () => {
