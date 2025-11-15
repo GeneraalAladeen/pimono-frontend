@@ -10,7 +10,7 @@
         <div>
           <input
             id="email"
-            v-model="form.gamertag"
+            v-model="form.email"
             name="email"
             required
             class="appearance-none block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
@@ -59,7 +59,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const form = reactive({
-  gamertag: '',
+  email: '',
   password: '',
 })
 

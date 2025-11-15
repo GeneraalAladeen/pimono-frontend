@@ -1,57 +1,61 @@
 <script setup>
-import { ref } from 'vue'
+import { ref , onMounted } from 'vue'
 
 import { useAuthStore } from '@/stores/auth'
 
 import router from '@/router'
+import axiosInstance from '@/utils/axios'
 
 import BalanceCard from '@/components/BalanceCard.vue'
 import TransferForm from '@/components/TransferForm.vue'
 import TransactionHistory from '@/components/TransactionHistory.vue'
 
-const balance = ref(546)
+const balance = ref()
 const credit = ref(1040950)
 const debit = ref(5416)
-const pagination = ref({
-  first: null,
-  last: null,
-  prev: null,
-  next: 'https://staging.pimono.com/api/transactions?cursor=eyJpZCI6MTgsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0',
-})
+const pagination = ref({})
 
 const authStore = useAuthStore()
 
-const transactions = ref([
-  {
-    commission_fee: 100,
-    amount: 3000,
-    receiver: {
-      id: 123,
-      name: 'James Bond',
-    },
-    sender: {
-      id: 1,
-      name: 'Jane Doe',
-    },
-    created_at: '2025-10-10 10:10:10',
-  },
-  {
-    commission_fee: 100,
-    amount: 3000,
-    receiver: {
-      id: 1,
-      name: 'Jane Doe',
-    },
-    sender: {
-      id: 12,
-      name: 'Chris Shawn',
-    },
-
-    created_at: '2025-10-10 10:10:10',
-  },
-])
+const transactions = ref([])
 const transactionsLoading = ref(false)
 const statLoading = ref(false)
+
+
+const loadData = async () => {
+  await Promise.all([
+    loadTransactions(),
+  ])
+}
+
+const loadTransactions = async () => {
+  transactionsLoading.value = true
+  try {
+    const response = await axiosInstance.get('transactions')
+
+    balance.value = authStore.user.balance
+    transactions.value = response.data.data
+    pagination.value = response.data.links
+  } catch (error) {
+    // Show toast
+    alert('Failed to load transactions')
+  } finally {
+    transactionsLoading.value = false
+  }
+}
+
+const loadMoreTransactions = async () => {
+  if (!pagination.value.next) return
+  
+  try {
+    const response = await axiosInstance.get(pagination.value.next)
+    transactions.value = [...transactions.value, ...response.data.data]
+    pagination.value = response.data.links
+  } catch (error) {
+    console.error('Failed to load more transactions:', error)
+    alert('Failed to load more transactions')
+  }
+}
 
 const handleLogout = async () => {
   try {
@@ -67,9 +71,11 @@ const handleTransferCompleted = () => {
   //show toast
 }
 
-const loadMoreTransactions = () => {
-  //load more
-}
+onMounted(async () => {
+  await loadData()
+})
+
+
 </script>
 
 <template>
