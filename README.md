@@ -1,44 +1,52 @@
 # pimono-wallet-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the front end for the pimono wallet built for a technical test. The application is built in Vue3 using composition Api. It uses Pinia for state management and laravel echo and pusher for real time updates.
 
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
+
+Make sure the latest version of node is available on system. i.e (node v24). To install Node visit `https://nodejs.org/en/download`. 
+
+Install dependencies
 
 ```sh
 yarn
 ```
 
-### Compile and Hot-Reload for Development
+Setup env
+
+```sh
+cp .env.example .env
+```
+
+Make sure the backend is running on the same machine and set `VITE_BACKEND_BASE_URL` to the backend url, ideally `http://localhost/`
+
+
+Configure pusher env. For the sake of the test i have provided mine but feel free to use yours. `NOTE: Make sure it is the same the one used on the backend`. 
+
+```sh
+  VITE_PUSHER_APP_KEY=b5c957260fd11205fc84
+  VITE_PUSHER_APP_CLUSTER=eu
+```
+
+### To Start application
 
 ```sh
 yarn dev
 ```
 
-### Compile and Minify for Production
+### User Credentials
+
+Users has been seeded into the backend already. To Log in. Use any of these email
 
 ```sh
-yarn build
+user1@example.com
+user2@example.com
+user2@example.com
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+the password for all of them is 
 
 ```sh
-yarn lint
+  password
 ```
