@@ -1,15 +1,12 @@
 <script setup>
 import { computed, defineProps, defineEmits } from 'vue'
 import { formatAmount, formatDate } from '@/utils/formatters'
+import { useAuthStore } from '@/stores/auth'
 
 const props = defineProps({
   transactions: {
     type: Array,
     default: () => [],
-  },
-  currentUserId: {
-    type: Number,
-    default: 1,
   },
   loading: {
     type: Boolean,
@@ -23,25 +20,27 @@ const props = defineProps({
 
 const emit = defineEmits(['load-more'])
 
+const authStore = useAuthStore()
+
 const getTransactionClass = (transaction) => {
-  return transaction.sender.id === props.currentUserId
+  return transaction.sender.id === authStore.userId
     ? 'border-red-200 bg-red-50'
     : 'border-green-200 bg-green-50'
 }
 
 const getTransactionDescription = (transaction) => {
-  if (transaction.sender.id === props.currentUserId) {
+  if (transaction.sender.id === authStore.userId) {
     return `Sent to ${transaction.receiver.name}`
   }
   return `Received from ${transaction.sender.name}`
 }
 
 const getAmountClass = (transaction) => {
-  return transaction.sender.id === props.currentUserId ? 'text-red-600' : 'text-green-600'
+  return transaction.sender.id === authStore.userId ? 'text-red-600' : 'text-green-600'
 }
 
 const getAmountDisplay = (transaction) => {
-  const prefix = transaction.sender.id === props.currentUserId ? '-' : '+'
+  const prefix = transaction.sender.id === authStore.userId ? '-' : '+'
   return prefix + formatAmount(transaction.amount)
 }
 </script>

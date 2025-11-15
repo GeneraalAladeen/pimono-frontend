@@ -1,5 +1,6 @@
 <script setup>
 import { ref , onMounted } from 'vue'
+import { useEchoPublic } from "@laravel/echo-vue";
 
 import { useAuthStore } from '@/stores/auth'
 
@@ -52,10 +53,33 @@ const loadMoreTransactions = async () => {
     transactions.value = [...transactions.value, ...response.data.data]
     pagination.value = response.data.links
   } catch (error) {
-    console.error('Failed to load more transactions:', error)
+
     alert('Failed to load more transactions')
   }
 }
+
+useEchoPublic(
+    `users.${authStore.userId}`,
+    ".transaction.completed",
+    (e) => {
+      handleRealtimeTransaction(e);
+    },
+);
+
+const handleRealtimeTransaction = (event) => {
+  console.log(event)
+  if (event.transaction.sender_id === authStore.userId) {
+    balance.value = parseFloat(balance.value) - parseFloat(event.transaction.total_amount_debited)
+  } else {
+    balance.value = parseFloat(balance.value) + parseFloat(event.transaction.amount)
+  }
+  
+  transactions.value.unshift(event.transaction)
+  
+  // show toast
+  alert(`Transaction complete`)
+}
+
 
 const handleLogout = async () => {
   try {

@@ -4,9 +4,17 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router'
 import App from './App.vue'
+import { configureEcho } from '@laravel/echo-vue';
 
 const pinia = createPinia()
 const app = createApp(App)
+
+configureEcho({
+    broadcaster: "pusher",
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true,
+});
 
 app.use(pinia)
 app.use(router)
