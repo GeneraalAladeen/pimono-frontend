@@ -1,6 +1,7 @@
 <script setup>
 import { ref , onMounted } from 'vue'
 import { useEchoPublic } from "@laravel/echo-vue";
+import { toast } from 'vue3-toastify';
 
 import { useAuthStore } from '@/stores/auth'
 
@@ -14,10 +15,7 @@ import TransactionHistory from '@/components/TransactionHistory.vue'
 const authStore = useAuthStore()
 
 const balance = ref(authStore.user?.balance)
-const credit = ref(1040950)
-const debit = ref(5416)
 const pagination = ref({})
-
 
 const transactions = ref([])
 const transactionsLoading = ref(false)
@@ -38,8 +36,7 @@ const loadTransactions = async () => {
     transactions.value = response.data.data
     pagination.value = response.data.links
   } catch (error) {
-    // Show toast
-    alert('Failed to load transactions')
+    toast.error('Failed to load transactions')
   } finally {
     transactionsLoading.value = false
   }
@@ -54,7 +51,7 @@ const loadMoreTransactions = async () => {
     pagination.value = response.data.links
   } catch (error) {
 
-    alert('Failed to load more transactions')
+    toast.error('Failed to load more transactions')
   }
 }
 
@@ -77,8 +74,7 @@ const handleRealtimeTransaction = (event) => {
 
   transactions.value.unshift(transaction)
   
-  // show toast
-  alert(`Transaction complete`)
+  toast.success(`Transaction complete`)
 }
 
 
@@ -87,13 +83,13 @@ const handleLogout = async () => {
     await authStore.logout()
     router.push('/login')
   } catch (error) {
-    //show toast
-    console.error('Logout error:', error)
+
+    toast.error('Logout error')
   }
 }
 
 const handleTransferCompleted = () => {
-  //show toast
+  toast.success(`Transaction sent successfuly`)
 }
 
 onMounted(async () => {
@@ -118,8 +114,6 @@ onMounted(async () => {
 
     <div class="flex justify-between gap-6 flex-col sm:flex-row">
       <BalanceCard title="Current Balance" :balance="balance" :loading="statLoading" />
-      <BalanceCard title="Credit" :balance="credit" :loading="statLoading" />
-      <BalanceCard title="Debit" :balance="debit" :loading="statLoading" />
     </div>
 
     <TransferForm @transfer-completed="handleTransferCompleted" />

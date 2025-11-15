@@ -3,6 +3,8 @@ import { ref, reactive, computed, defineEmits, defineProps } from 'vue'
 import { formatAmount } from '@/utils/formatters'
 import axiosInstance from '@/utils/axios'
 
+import { toast } from 'vue3-toastify';
+
 const emit = defineEmits(['transfer-completed'])
 
 const loading = ref(false)
@@ -32,9 +34,6 @@ const submitTransfer = async () => {
   try {
     await axiosInstance.post('transactions', form)
     
-    // show toast
-    alert('Transfer completed successfully!')
-    
     form.receiver_id = ''
     form.amount = ''
     
@@ -44,11 +43,9 @@ const submitTransfer = async () => {
     if (error.response && error.response.status === 422) {
 
       errors.value = error.response.data.errors;
-      //show toast
-      alert('Please check the form for errors')
     } else {
       const message = error.response?.data?.message || 'Transfer failed'
-      alert(message)
+      toast.error(message)
     }
   } finally {
     loading.value = false

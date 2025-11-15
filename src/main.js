@@ -5,6 +5,8 @@ import { createPinia } from 'pinia'
 import router from './router'
 import App from './App.vue'
 import { configureEcho } from '@laravel/echo-vue';
+import Vue3Toastify from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -16,6 +18,9 @@ configureEcho({
     forceTLS: true,
 });
 
+app.use(Vue3Toastify,{
+    autoClose: 3000
+})
 app.use(pinia)
 app.use(router)
 app.mount('#app')
