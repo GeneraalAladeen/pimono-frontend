@@ -8,6 +8,11 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), vueDevTools(), tailwindcss()],
+  test: {
+    environment: 'happy-dom',
+    setupFiles: ['./vitest.setup.js'],
+    include: ['src/**/*.test.js'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
