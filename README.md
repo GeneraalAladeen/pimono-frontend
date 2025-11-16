@@ -22,7 +22,7 @@ cp .env.example .env
 Make sure the backend is running on the same machine and set `VITE_BACKEND_BASE_URL` to the backend url, ideally `http://localhost/`
 
 
-Configure pusher env. For the sake of the test i have provided mine but feel free to use yours. `NOTE: Make sure it is the same the one used on the backend`. 
+Configure pusher env. For the sake of the test i have provided mine but feel free to use yours. `NOTE: Make sure it is the same as the one used on the backend`. 
 
 ```sh
   VITE_PUSHER_APP_KEY=b5c957260fd11205fc84
@@ -37,7 +37,7 @@ yarn dev
 
 ### User Credentials
 
-Users has been seeded into the backend already. To Log in. Use any of these email
+Users have been seeded into the backend already. To Log in. Use any of these email
 
 ```sh
 user1@example.com
