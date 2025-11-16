@@ -5,7 +5,19 @@ This is the front end for the pimono wallet built for a technical test. The appl
 
 ## Project Setup
 
-Make sure the latest version of node is available on system. i.e (node v24). To install Node visit `https://nodejs.org/en/download`. 
+Make sure the latest version of node is available on system. i.e (node >=22.12.0). To install Node visit `https://nodejs.org/en/download`. 
+
+Clone the repository
+
+```sh
+git clone https://github.com/GeneraalAladeen/pimono-frontend.git
+```
+
+Switch to repo folder
+
+```sh
+cd pimono-frontend
+```
 
 Install dependencies
 
@@ -49,4 +61,12 @@ the password for all of them is
 
 ```sh
   password
+```
+
+## Testing
+
+To run application tests
+
+```sh
+  yarn test
 ```
