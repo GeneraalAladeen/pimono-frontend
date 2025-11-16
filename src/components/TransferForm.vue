@@ -70,7 +70,8 @@ const submitTransfer = async () => {
     form.receiver_id = ''
     form.amount = ''
     v$.value.$reset()
-    
+
+    toast.success(`Transaction sent successfuly`)
     emit('transfer-completed')
     
   } catch (error) {

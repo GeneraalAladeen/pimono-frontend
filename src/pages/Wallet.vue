@@ -1,12 +1,10 @@
 <script setup>
-import { ref , onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useEchoPublic } from "@laravel/echo-vue";
 import { toast } from 'vue3-toastify';
 
 import { useAuthStore } from '@/stores/auth'
-
-import router from '@/router'
-import axiosInstance from '@/utils/axios'
+import { useTransactions } from '@/composables/useTransactions'
 
 import BalanceCard from '@/components/BalanceCard.vue'
 import Header from '@/components/Header.vue'
@@ -14,13 +12,17 @@ import TransferForm from '@/components/TransferForm.vue'
 import TransactionHistory from '@/components/TransactionHistory.vue'
 
 const authStore = useAuthStore()
-
-const balance = ref(authStore.user?.balance)
-const pagination = ref({})
-
-const transactions = ref([])
-const transactionsLoading = ref(false)
+const balance = ref(authStore.user?.balance || 0)
 const statLoading = ref(false)
+
+const { 
+  transactions, 
+  pagination, 
+  loading: transactionsLoading, 
+  hasMore, 
+  loadTransactions, 
+  addTransaction 
+} = useTransactions()
 
 
 const loadData = async () => {
@@ -29,32 +31,6 @@ const loadData = async () => {
   ])
 }
 
-const loadTransactions = async () => {
-  transactionsLoading.value = true
-  try {
-    const response = await axiosInstance.get('transactions')
-
-    transactions.value = response.data.data
-    pagination.value = response.data.links
-  } catch (error) {
-    toast.error('Failed to load transactions')
-  } finally {
-    transactionsLoading.value = false
-  }
-}
-
-const loadMoreTransactions = async () => {
-  if (!pagination.value.next) return
-  
-  try {
-    const response = await axiosInstance.get(pagination.value.next)
-    transactions.value = [...transactions.value, ...response.data.data]
-    pagination.value = response.data.links
-  } catch (error) {
-
-    toast.error('Failed to load more transactions')
-  }
-}
 
 useEchoPublic(
     `users.${authStore.userId}`,
@@ -67,21 +43,17 @@ useEchoPublic(
 const handleRealtimeTransaction = (event) => {
   const { transaction } = event;
 
-  if (transaction.sender_id === authStore.userId) {
-    balance.value = transaction.sender.balance
-  } else {
-    balance.value = transaction.receiver.balance
-  }
+  const isSender = transaction.sender_id === authStore.userId
+  
+  balance.value = isSender 
+    ? transaction.sender.balance 
+    : transaction.receiver.balance
 
-  transactions.value.unshift(transaction)
+  addTransaction(transaction)
   
   toast.success(`Transaction complete`)
 }
 
-
-const handleTransferCompleted = () => {
-  toast.success(`Transaction sent successfuly`)
-}
 
 onMounted(async () => {
   await loadData()
@@ -98,15 +70,13 @@ onMounted(async () => {
       <BalanceCard title="Current Balance" :balance="balance" :loading="statLoading" />
     </div>
 
-    <TransferForm @transfer-completed="handleTransferCompleted" />
+    <TransferForm />
 
-    <div>
-      <TransactionHistory
-        :transactions="transactions"
-        :loading="transactionsLoading"
-        :pagination="pagination"
-        @load-more="loadMoreTransactions"
-      />
-    </div>
+    <TransactionHistory
+      :transactions="transactions"
+      :loading="transactionsLoading"
+      :pagination="pagination"
+      @load-more="() => loadTransactions(pagination.next)"
+    />
   </div>
 </template>
