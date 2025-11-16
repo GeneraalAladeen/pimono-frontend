@@ -4,6 +4,7 @@ import { formatAmount } from '@/utils/formatters'
 import { useAuthStore } from '@/stores/auth'
 import { useTransferForm } from '@/composables/useTransferForm'
 import Input from '@/components/common/Input.vue'
+import Button from '@/components/common/Button.vue'
 
 const authStore = useAuthStore()
 const emit = defineEmits(['transfer-completed'])
@@ -51,20 +52,16 @@ const {
 
         <p class="mt-1 text-sm font-semibold">
             Commission fee: {{ formatAmount(commissionFee) }} (1.5%)
-          </p>
-          <p class="mt-1 text-sm font-semibold">Total debited: {{ formatAmount(totalAmount) }}</p>
+        </p>
+        <p class="mt-1 text-sm font-semibold">Total debited: {{ formatAmount(totalAmount) }}</p>
 
-        <button
-          type="submit"
-          :disabled="loading || v$.$invalid"
-          :class="[
-            'w-full flex justify-center py-2 px-4 border border-transparent rounded-md text-sm text-white bg-blue-600 hover:bg-blue-700 ',
-            loading || v$.$invalid ? 'opacity-50 cursor-not-allowed' : '',
-          ]"
-        >
-          <span v-if="loading">Processing...</span>
-          <span v-else>Send Money</span>
-        </button>
+        <Button
+            :loading="loading"
+            :disabled="loading || v$.$invalid"
+            label="Send Money"
+            loading-label="Processing..." >
+        </Button>
+
       </div>
     </form>
   </div>

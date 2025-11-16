@@ -2,6 +2,7 @@
 import { computed, defineProps, defineEmits } from 'vue'
 import { formatAmount, formatDate } from '@/utils/formatters'
 import { useAuthStore } from '@/stores/auth'
+import Button from '@/components/common/Button.vue'
 
 const props = defineProps({
   transactions: {
@@ -88,12 +89,13 @@ const getAmountDisplay = (transaction) => {
       </div>
 
       <div v-if="pagination.next" class="mt-4">
-        <button
-          @click="$emit('load-more')"
-          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-        >
-          Load More
-        </button>
+        <Button
+            @click="$emit('load-more')"
+            :loading="loading"
+            :disabled="loading"
+            label="Load More"
+            loading-label="Loading..." >
+        </Button>
       </div>
     </div>
   </div>

@@ -27,16 +27,11 @@
           {{ error }}
         </p>
 
-        <button
-          type="submit"
-          :disabled="authStore.isLoading"
-          :class="[
-            'group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
-            authStore.isLoading ? 'opacity-50 cursor-not-allowed' : '',
-          ]"
-        >
-          {{ authStore.isLoading ? 'Signing in...' : 'Sign in' }}
-        </button>
+        <Button
+          :loading="authStore.isLoading"
+          label="Sign in"
+          loading-label="Signing in...">
+        </Button>
       </form>
     </div>
   </div>
@@ -47,6 +42,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Input from '@/components/common/Input.vue'
+import Button from '@/components/common/Button.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
