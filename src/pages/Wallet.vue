@@ -6,9 +6,9 @@ import { toast } from 'vue3-toastify';
 import { useAuthStore } from '@/stores/auth'
 import { useTransactions } from '@/composables/useTransactions'
 
-import BalanceCard from '@/components/BalanceCard.vue'
+import BalanceCard from '@/components/BalanceCard'
 import Header from '@/components/Header.vue'
-import TransferForm from '@/components/TransferForm.vue'
+import TransferForm from '@/components/TransferForm'
 import TransactionHistory from '@/components/TransactionHistory.vue'
 
 const authStore = useAuthStore()
