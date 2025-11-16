@@ -9,7 +9,7 @@ import { useTransactions } from '@/composables/useTransactions'
 import BalanceCard from '@/components/BalanceCard'
 import Header from '@/components/Header.vue'
 import TransferForm from '@/components/TransferForm'
-import TransactionHistory from '@/components/TransactionHistory.vue'
+import TransactionHistory from '@/components/TransactionHistory'
 
 const authStore = useAuthStore()
 const balance = ref(authStore.user?.balance || 0)
